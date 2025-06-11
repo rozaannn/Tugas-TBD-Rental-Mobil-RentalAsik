@@ -38,7 +38,7 @@ const CarDetailPage = () => {
             <h2>Rp {Number(car.price).toLocaleString('id-ID')} / hari</h2>
 
             {car.available ? (
-                <BookingForm carId={car.id} />
+                <BookingForm carModel={car.model} carYear={car.year} />
             ) : (
                 <p style={{ fontWeight: 'bold', color: 'red', fontSize: '1.2rem' }}>Mobil ini sedang tidak tersedia untuk dipesan.</p>
             )}

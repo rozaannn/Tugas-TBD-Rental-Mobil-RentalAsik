@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import api from '../services/api';
 
-const BookingForm = ({ carId }) => {
+const BookingForm = ({ carModel, carYear }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState('');
@@ -40,12 +40,13 @@ const BookingForm = ({ carId }) => {
 
         try {
             const bookingData = {
-                car_id: carId,
+                model: carModel,
+                year: carYear,
                 start_date: startDate,
                 end_date: endDate,
                 payment_method: paymentMethod,
             };
-            await api.post('/bookings', bookingData);
+            await api.post('/bookings/by-type', bookingData);
             setSuccess('Booking berhasil dibuat! Anda akan diarahkan ke halaman "Booking Saya".');
             setTimeout(() => navigate('/my-bookings'), 2000);
         } catch (err) {

@@ -6,7 +6,8 @@ const {
     getAllBookings,
     updateBookingStatus,
     getActiveBookingsSummary,
-    getCustomerHistory
+    getCustomerHistory,
+    createBookingByType
 } = require('../controllers/bookingController'); // [cite: 155]
 const { authenticateToken, requireAdmin } = require('../middleware/auth'); // [cite: 156]
 
@@ -39,6 +40,19 @@ const updateStatusValidation = [
         .withMessage('Invalid status value. Must be one of: pending, confirmed, completed, cancelled')
 ];
 
+const bookingByTypeValidation = [
+    body('model').notEmpty().withMessage('Model mobil wajib diisi'),
+    body('year').isInt().withMessage('Tahun mobil wajib diisi'),
+    body('start_date').isDate().withMessage('Format tanggal mulai salah'),
+    body('end_date').isDate().withMessage('Format tanggal selesai salah')
+        .custom((value, { req }) => {
+            if (new Date(value) < new Date(req.body.start_date)) {
+                throw new Error('Tanggal selesai tidak boleh sebelum tanggal mulai');
+            }
+            return true;
+        }),
+    body('payment_method').isIn(['bank', 'ewallet', 'cash']).withMessage('Metode pembayaran tidak valid')
+];
 
 // Rute-rute
 router.get('/history/customer/:userId', authenticateToken, requireAdmin, getCustomerHistory);
@@ -49,7 +63,7 @@ router.get('/my-bookings', authenticateToken, getUserBookings); // [cite: 158]
 
 // Mendapatkan semua booking (hanya untuk admin)
 router.get('/all', authenticateToken, requireAdmin, getAllBookings); // [cite: 158]
-
+router.post('/by-type', authenticateToken, bookingByTypeValidation, createBookingByType);
 // Memperbarui status booking berdasarkan ID (hanya untuk admin)
 router.put('/:id/status',
     authenticateToken,       // Pastikan pengguna terautentikasi

@@ -259,11 +259,89 @@ const getCustomerHistory = async (req, res) => {
     }
 };
 
+const createBookingByType = async (req, res) => {
+    const connection = await db.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            await connection.rollback();
+            return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+        }
+
+        // Ambil tipe mobil (model & tahun) dari body, bukan car_id
+        const { model, year, start_date, end_date, payment_method } = req.body;
+        const user_id = req.user.id;
+
+        // 1. Cari semua ID mobil yang cocok dengan tipe yang diminta
+        const [allUnits] = await connection.execute(
+            'SELECT id, price FROM cars WHERE model = ? AND year = ? AND available = TRUE',
+            [model, year]
+        );
+
+        if (allUnits.length === 0) {
+            await connection.rollback();
+            return res.status(404).json({ success: false, message: 'Tipe mobil tidak ditemukan atau tidak tersedia.' });
+        }
+
+        const unitIds = allUnits.map(car => car.id); // Contoh: [7, 8, 9]
+        const carPrice = allUnits[0].price; // Asumsi harga sama untuk tipe yang sama
+
+        // 2. Cari semua unit dari tipe ini yang sudah di-booking pada tanggal yang tumpang tindih
+        const sql = `SELECT DISTINCT car_id FROM bookings
+             WHERE car_id IN (?) AND status IN ('pending', 'confirmed')
+             AND (start_date <= ? AND end_date >= ?)`;
+
+        // Gunakan connection.query karena kita sudah memformat 'IN' secara manual
+        const [conflictingBookings] = await connection.query(sql, [unitIds, end_date, start_date]);
+        // --- AKHIR PERUBAHAN ---
+
+        const unavailableUnitIds = conflictingBookings.map(b => b.car_id);
+        // 3. Tentukan unit mana yang tersedia
+        const availableUnit = allUnits.find(unit => !unavailableUnitIds.includes(unit.id));
+
+        // 4. Jika tidak ada unit yang tersedia, kirim error
+        if (!availableUnit) {
+            await connection.rollback();
+            return res.status(400).json({ success: false, message: 'Semua unit untuk mobil tipe ini sudah dipesan pada tanggal tersebut.' });
+        }
+
+        // 5. Kita menemukan unit yang tersedia! Gunakan ID-nya.
+        const availableCarId = availableUnit.id;
+
+        // 6. Hitung total biaya
+        const sDate = new Date(start_date);
+        const eDate = new Date(end_date);
+        const rentalDays = (Date.UTC(eDate.getFullYear(), eDate.getMonth(), eDate.getDate()) - Date.UTC(sDate.getFullYear(), sDate.getMonth(), sDate.getDate())) / (1000 * 60 * 60 * 24) + 1;
+        const total_amount = rentalDays * carPrice;
+
+        // 7. Masukkan booking baru dengan ID unit yang tersedia
+        await connection.execute(
+            `INSERT INTO bookings (user_id, car_id, start_date, end_date, total_amount, payment_method, status)
+             VALUES (?, ?, ?, ?, ?, ?, 'confirmed')`,
+            [user_id, availableCarId, start_date, end_date, total_amount, payment_method]
+        );
+
+        await connection.commit();
+        res.status(201).json({ success: true, message: 'Booking berhasil dibuat!' });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Create booking by type error:', error);
+        res.status(500).json({ success: false, message: 'Gagal membuat booking.' });
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
+
 module.exports = {
     createBooking, // [cite: 141]
     getUserBookings, // [cite: 142]
     getAllBookings, // [cite: 142]
     updateBookingStatus, // [cite: 142]
     getActiveBookingsSummary,
-    getCustomerHistory
+    getCustomerHistory,
+    createBookingByType // [cite: 142]
 };
