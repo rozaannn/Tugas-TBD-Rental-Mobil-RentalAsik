@@ -1,0 +1,40 @@
+.home-auth-layout {
+    height: calc(100vh - 90px); /* Tinggi penuh dikurangi navbar */
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 1;
+}
+
+.overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 2;
+}
+
+.content-container {
+    position: relative;
+    z-index: 3; /* Pastikan konten berada di atas video dan overlay */
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}

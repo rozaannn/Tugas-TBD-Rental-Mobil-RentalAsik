@@ -1,0 +1,45 @@
+/* Styling untuk teks dan tombol hero */
+.hero-content-inner {
+    animation: fadeInUp 1s ease-out forwards;
+}
+.hero-h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+    opacity: 0;
+}
+.hero-p {
+    font-size: 1.5rem;
+    margin: 1rem auto 0 auto;
+    max-width: 600px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out 0.8s forwards;
+    opacity: 0;
+}
+.hero-btn {
+    margin-top: 2rem;
+    padding: 1rem 2.5rem;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    animation: fadeInUp 1s ease-out 1.1s forwards;
+    opacity: 0;
+}
+.hero-btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+/* Keyframe untuk animasi (bisa dipindahkan ke index.css jika ingin dipakai global) */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
