@@ -7,7 +7,7 @@ const fs = require('fs').promises; // [cite: 57]
 const getAllCars = async (req, res) => { // [cite: 58]
     try {
         const [cars] = await db.execute( // [cite: 58]
-            'SELECT id, model, license_plate, year, price, image, available FROM cars ORDER BY created_at DESC' // [cite: 58]
+            'SELECT id, model, license_plate, year, price, image, available FROM cars ORDER BY model ASC, year DESC' // [cite: 58]
         );
         res.json({ // [cite: 59]
             success: true, // [cite: 59]
