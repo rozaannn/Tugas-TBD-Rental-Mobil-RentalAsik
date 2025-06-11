@@ -115,26 +115,34 @@ const createBooking = async (req, res) => { // [cite: 101]
 };
 
 // Get user bookings
-const getUserBookings = async (req, res) => { // [cite: 119]
+const getUserBookings = async (req, res) => {
     try {
-        const user_id = req.user.id; // [cite: 119]
-        const [bookings] = await db.execute( // [cite: 120]
-            `SELECT b.*, c.model, c.year, c.image
+        const user_id = req.user.id;
+        const [bookings] = await db.execute(
+            `SELECT
+                b.*,
+                c.model,
+                c.year,
+                -- Logika untuk mengambil gambar perwakilan
+                COALESCE(
+                    c.image,
+                    (SELECT image FROM cars WHERE model = c.model AND year = c.year AND image IS NOT NULL LIMIT 1)
+                ) AS image 
              FROM bookings b
              JOIN cars c ON b.car_id = c.id
              WHERE b.user_id = ?
-             ORDER BY b.created_at DESC`, // [cite: 120]
-            [user_id] // [cite: 121]
+             ORDER BY b.created_at DESC`,
+            [user_id]
         );
-        res.json({ // [cite: 122]
-            success: true, // [cite: 122]
-            data: bookings // [cite: 122]
+        res.json({
+            success: true,
+            data: bookings
         });
-    } catch (error) { // [cite: 123]
-        console.error('Get user bookings error:', error); // [cite: 123]
-        res.status(500).json({ // [cite: 124]
-            success: false, // [cite: 124]
-            message: 'Failed to fetch bookings' // [cite: 124]
+    } catch (error) {
+        console.error('Get user bookings error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch bookings'
         });
     }
 };
