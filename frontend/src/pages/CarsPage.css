@@ -41,3 +41,16 @@
     margin-top: auto;
     padding-top: 1rem;
 }
+.car-availability {
+    font-size: 0.9rem;
+    color: #28a745; /* Hijau */
+    font-weight: 500;
+    margin-top: 0;
+}
+
+.car-availability-unavailable {
+    font-size: 0.9rem;
+    color: #dc3545; /* Merah */
+    font-weight: 500;
+    margin-top: 0;
+}
