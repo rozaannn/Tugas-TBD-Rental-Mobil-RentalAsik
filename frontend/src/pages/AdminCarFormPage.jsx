@@ -8,6 +8,7 @@ const AdminCarFormPage = () => {
     const isEditMode = Boolean(id);
 
     const [model, setModel] = useState('');
+    const [licensePlate, setLicensePlate] = useState('');
     const [year, setYear] = useState('');
     const [price, setPrice] = useState('');
     const [available, setAvailable] = useState(true);
@@ -22,6 +23,7 @@ const AdminCarFormPage = () => {
                 .then(response => {
                     const car = response.data.data;
                     setModel(car.model);
+                    setLicensePlate(car.license_plate);
                     setYear(car.year);
                     setPrice(car.price);
                     setAvailable(car.available);
@@ -42,6 +44,7 @@ const AdminCarFormPage = () => {
 
         const formData = new FormData();
         formData.append('model', model);
+        formData.append('license_plate', licensePlate);
         formData.append('year', year);
         formData.append('price', price);
         formData.append('available', available);
@@ -79,6 +82,10 @@ const AdminCarFormPage = () => {
                 <div className="form-group">
                     <label>Model</label>
                     <input type="text" value={model} onChange={(e) => setModel(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                    <label>Plat Nomor</label>
+                    <input type="text" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} required />
                 </div>
                 <div className="form-group">
                     <label>Tahun</label>
