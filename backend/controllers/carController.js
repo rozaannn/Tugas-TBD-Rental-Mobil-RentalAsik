@@ -63,12 +63,12 @@ const addCar = async (req, res) => { // [cite: 68]
             });
         }
 
-        const { model, year, price } = req.body; // [cite: 70]
+        const { model, license_plate, year, price } = req.body; // [cite: 70]
         const image = req.file ? req.file.filename : null; // [cite: 71]
 
         const [result] = await db.execute( // [cite: 71]
-            'INSERT INTO cars (model, year, price, image) VALUES (?, ?, ?, ?)', // [cite: 71]
-            [model, year, price, image] // [cite: 71]
+            'INSERT INTO cars (model, license_plate, year, price, image) VALUES (?, ?, ?, ?)', // [cite: 71]
+            [model, license_plate, year, price, image] // [cite: 71]
         );
         // Get the created car
         const [newCar] = await db.execute( // [cite: 72]
@@ -93,7 +93,7 @@ const addCar = async (req, res) => { // [cite: 68]
 const updateCar = async (req, res) => { // [cite: 76]
     try {
         const { id } = req.params; // [cite: 76]
-        const { model, year, price, available } = req.body; // [cite: 77]
+        const { model, license_plate, year, price, available } = req.body; // [cite: 77]
 
         // Check if car exists
         const [existingCar] = await db.execute( // [cite: 77]
@@ -107,8 +107,8 @@ const updateCar = async (req, res) => { // [cite: 76]
             });
         }
 
-        let updateQuery = 'UPDATE cars SET model = ?, year = ?, price = ?, available = ?'; // [cite: 79]
-        let updateParams = [model, year, price, available]; // [cite: 80]
+        let updateQuery = 'UPDATE cars SET model = ?, license_plate = ?, year = ?, price = ?, available = ?'; // [cite: 79]
+        let updateParams = [model, license_plate, year, price, available]; // [cite: 80]
 
         // Handle image update
         if (req.file) { // [cite: 80]

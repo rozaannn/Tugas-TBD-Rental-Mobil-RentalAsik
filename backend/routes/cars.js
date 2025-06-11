@@ -42,6 +42,7 @@ const upload = multer({ // [cite: 151]
 // Validation rules
 const carValidation = [ // [cite: 152]
     body('model').notEmpty().withMessage('Model is required'), // [cite: 152]
+    body('license_plate').notEmpty().withMessage('License plate is required'), // [cite: 152]
     body('year').isInt({ min: 1900, max: new Date().getFullYear() + 1 }).withMessage('Valid year is required'), // [cite: 152]
     body('price').isFloat({ min: 0 }).withMessage('Valid price is required') // [cite: 152]
 ];
