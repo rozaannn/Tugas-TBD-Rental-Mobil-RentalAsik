@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import api from '../services/api';
+import { toast } from 'react-toastify'; 
 
 const BookingForm = ({ carModel, carYear }) => {
     const { user } = useAuth();
@@ -9,16 +10,16 @@ const BookingForm = ({ carModel, carYear }) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('bank');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    //const [error, setError] = useState('');
+    //const [success, setSuccess] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
+        // setError('');
+        // setSuccess('');
 
         if (!user) {
-            setError('Anda harus login untuk membuat pemesanan.');
+            toast.error('Anda harus login untuk membuat pemesanan.');
             return;
         }
         // Dapatkan tanggal hari ini (set ke awal hari untuk perbandingan yang adil)
@@ -30,11 +31,11 @@ const BookingForm = ({ carModel, carYear }) => {
 
         // Periksa apakah tanggal mulai sebelum hari ini
         if (selectedStartDate < today) {
-            setError('Tanggal mulai tidak boleh sebelum tanggal hari ini.');
+            toast.error('Tanggal mulai tidak boleh sebelum tanggal hari ini.');
             return;
         }
         if (new Date(startDate) > new Date(endDate)) {
-            setError('Tanggal selesai tidak boleh sebelum tanggal mulai.');
+            toast.error('Tanggal selesai tidak boleh sebelum tanggal mulai.');
             return;
         }
 
@@ -47,10 +48,10 @@ const BookingForm = ({ carModel, carYear }) => {
                 payment_method: paymentMethod,
             };
             await api.post('/bookings/by-type', bookingData);
-            setSuccess('Booking berhasil dibuat! Anda akan diarahkan ke halaman "Booking Saya".');
+            toast.success('Booking berhasil dibuat! Anda akan diarahkan ke halaman "Booking Saya".');
             setTimeout(() => navigate('/my-bookings'), 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Gagal membuat booking.');
+            toast.success(err.response?.data?.message || 'Gagal membuat booking.');
         }
     };
 
@@ -78,8 +79,8 @@ const BookingForm = ({ carModel, carYear }) => {
                         <option value="cash">Tunai</option>
                     </select>
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                {success && <p style={{ color: 'green' }}>{success}</p>}
+                {/*error && <p style={{ color: 'red' }}>{error}</p>}
+                {success && <p style={{ color: 'green' }}>{success}</p>*/}
                 <button type="submit" className="btn">Pesan Sekarang</button>
             </form>
         </div>

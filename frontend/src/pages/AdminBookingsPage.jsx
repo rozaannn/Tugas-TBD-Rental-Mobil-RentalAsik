@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify'; 
 import api from '../services/api';
 import './AdminPage.css'; // Kita gunakan kembali CSS admin yang sudah ada
 
@@ -28,10 +29,10 @@ const AdminBookingsPage = () => {
     const handleStatusChange = async (bookingId, newStatus) => {
         try {
             await api.put(`/bookings/${bookingId}/status`, { status: newStatus });
-            alert('Status booking berhasil diperbarui!');
+            toast.success('Status booking berhasil diperbarui!');
             fetchBookings(); // Muat ulang data setelah update
         } catch (err) {
-            alert('Gagal memperbarui status: ' + (err.response?.data?.message || err.message));
+            toast.error('Gagal memperbarui status: ' + (err.response?.data?.message || err.message));
         }
     };
 

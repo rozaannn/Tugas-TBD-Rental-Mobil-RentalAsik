@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify'; 
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import './AdminPage.css'; // Kita akan buat file CSS ini
@@ -26,10 +27,10 @@ const AdminCarsPage = () => {
         if (window.confirm('Apakah Anda yakin ingin menghapus mobil ini?')) {
             try {
                 await api.delete(`/cars/${carId}`);
-                alert('Mobil berhasil dihapus!');
+                toast.success('Mobil berhasil dihapus!');
                 fetchCars(); // Muat ulang daftar mobil setelah dihapus
             } catch (err) {
-                alert('Gagal menghapus mobil: ' + (err.response?.data?.message || err.message));
+                toast.error('Gagal menghapus mobil: ' + (err.response?.data?.message || err.message));
             }
         }
     };

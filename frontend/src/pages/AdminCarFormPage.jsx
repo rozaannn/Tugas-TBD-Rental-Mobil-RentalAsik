@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { toast } from 'react-toastify';
 
 const AdminCarFormPage = () => {
     const { id } = useParams(); // Ambil ID dari URL jika ada (untuk mode edit)
@@ -14,7 +15,6 @@ const AdminCarFormPage = () => {
     const [available, setAvailable] = useState(true);
     const [image, setImage] = useState(null);
     const[existingModels, setExistingModels] = useState([]);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
 
@@ -41,7 +41,7 @@ const AdminCarFormPage = () => {
                 })
                 .catch(err => {
                     console.error('Error fetching car data:', err);
-                    setError('Gagal memuat data mobil.');
+                    toast.error('Gagal memuat data mobil.');
                     setLoading(false);
                 });
         }
@@ -63,7 +63,7 @@ const AdminCarFormPage = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        //setError('');
         setLoading(true);
 
         const formData = new FormData();
@@ -81,16 +81,19 @@ const AdminCarFormPage = () => {
                 await api.put(`/cars/${id}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
-                alert('Mobil berhasil diperbarui!');
+                toast.success('Mobil berhasil diperbarui!');
             } else {
                 await api.post('/cars', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
-                alert('Mobil berhasil ditambahkan!');
+                toast.success('Mobil berhasil ditambahkan!');
             }
-            navigate('/admin/cars');
+            setTimeout(() => {
+                navigate('/admin/cars');
+            }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Terjadi kesalahan.');
+            const errorMessage = err.response?.data?.message || 'Terjadi kesalahan.';
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -101,7 +104,7 @@ const AdminCarFormPage = () => {
     return (
         <div className="form-container">
             <h2>{isEditMode ? 'Edit Mobil' : 'Tambah Mobil Baru'}</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {/*error && <p style={{ color: 'red' }}>{error}</p>*/}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Model</label>
