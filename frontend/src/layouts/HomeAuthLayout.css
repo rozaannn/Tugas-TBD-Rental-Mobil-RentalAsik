@@ -37,4 +37,10 @@
     color: #fff;
     text-align: center;
     padding: 20px;
+
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
