@@ -21,7 +21,18 @@ const BookingForm = ({ carId }) => {
             setError('Anda harus login untuk membuat pemesanan.');
             return;
         }
+        // Dapatkan tanggal hari ini (set ke awal hari untuk perbandingan yang adil)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
+        // Konversi tanggal mulai dari input menjadi objek Date
+        const selectedStartDate = new Date(startDate);
+
+        // Periksa apakah tanggal mulai sebelum hari ini
+        if (selectedStartDate < today) {
+            setError('Tanggal mulai tidak boleh sebelum tanggal hari ini.');
+            return;
+        }
         if (new Date(startDate) > new Date(endDate)) {
             setError('Tanggal selesai tidak boleh sebelum tanggal mulai.');
             return;

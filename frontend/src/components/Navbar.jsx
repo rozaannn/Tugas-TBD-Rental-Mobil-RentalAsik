@@ -20,38 +20,35 @@ const Navbar = () => {
                     <li className="nav-item">
                         <Link to="/cars" className="nav-links">Mobil</Link>
                     </li>
-                    {user && user.is_admin && (
-                        <>
-                            <li className="nav-item">
-                                <Link to="/admin/dashboard" className="nav-links">Dashboard</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/admin/cars" className="nav-links">Manajemen Mobil</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/admin/bookings" className="nav-links">Manajemen Booking</Link> {/* <-- Tambahkan Link Ini */}
-                            </li>
-                        </>
-                    )}
-                        
-            {user && !user.is_admin && ( // <-- Tambahkan kondisi ini (opsional, agar tidak tumpang tindih)
-                <li className="nav-item">
-                    <Link to="/my-bookings" className="nav-links">Booking Saya</Link>
-                </li>
-            )}
+
+                    {/* --- BLOK KONDISIONAL UTAMA YANG DIPERBAIKI --- */}
                     {user ? (
+                        // Jika user SUDAH LOGIN
                         <>
-                            <li className="nav-item">
-                                <Link to="/my-bookings" className="nav-links">Booking Saya</Link>
-                            </li>
+                            {user.is_admin ? (
+                                // Tampilan KHUSUS untuk Admin
+                                <>
+                                    <li className="nav-item"><Link to="/admin/dashboard" className="nav-links">Dashboard</Link></li>
+                                    <li className="nav-item"><Link to="/admin/cars" className="nav-links">Manajemen Mobil</Link></li>
+                                    <li className="nav-item"><Link to="/admin/bookings" className="nav-links">Manajemen Booking</Link></li>
+                                </>
+                            ) : (
+                                // Tampilan KHUSUS untuk Pengguna Biasa
+                                <li className="nav-item">
+                                    <Link to="/my-bookings" className="nav-links">Booking Saya</Link>
+                                </li>
+                            )}
+
+                            {/* Tampilan yang sama untuk SEMUA user yang sudah login */}
                             <li className="nav-item">
                                 <span className="nav-links nav-user">Halo, {user.name}!</span>
                             </li>
-                             <li className="nav-item">
+                            <li className="nav-item">
                                 <button onClick={handleLogout} className="nav-links-button">Logout</button>
                             </li>
                         </>
                     ) : (
+                        // Jika user BELUM LOGIN
                         <>
                             <li className="nav-item">
                                 <Link to="/login" className="nav-links">Login</Link>
