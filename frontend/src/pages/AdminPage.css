@@ -5,33 +5,58 @@
     margin-bottom: 2rem;
 }
 
+.admin-header h1 {
+    margin: 0;
+}
+
+.admin-header .btn {
+    width: auto;
+}
+
+.admin-table .col-center {
+    text-align: center;
+}
+.admin-table .col-right {
+    text-align: right;
+}
+
 .admin-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    margin-top: 1.5rem;
 }
 
 .admin-table th, .admin-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
+    border-bottom: 1px solid #333; /* Hanya garis bawah */
+    padding: 16px 12px;
     text-align: left;
 }
 
 .admin-table th {
-    background-color: #f4f4f9;
+    background-color: transparent;
     font-weight: 600;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-top: 1px solid #333;
 }
 
-.admin-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.admin-table tbody tr {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #2a2a2a;
 }
 
 .admin-table .actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit, .btn-delete, .status-select {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -39,34 +64,67 @@
     color: white;
     text-decoration: none;
     font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+.btn-edit:hover, .btn-delete:hover {
+    opacity: 0.8;
 }
 
 .btn-edit {
     background-color: #ffc107;
-    color: #333;
+    color: #111;
 }
 
 .btn-delete {
     background-color: #dc3545;
 }
 
+/* Styling untuk status agar konsisten */
 .status {
     display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: capitalize;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .status-confirmed { background-color: #28a745; }
-.status-pending { background-color: #ffc107; color: #333; }
+.status-pending { background-color: #ffc107; color: #111; }
 .status-completed { background-color: #17a2b8; }
 .status-cancelled { background-color: #dc3545; }
 
 .status-select {
-    padding: 6px;
+    padding: 8px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
+    background-color: #333;
+    color: #fff;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #fff;
+}
+
+.status-badge.available {
+    background-color: #28a745; /* Hijau */
+}
+
+.status-badge.unavailable {
+    background-color: #6c757d; /* Abu-abu */
+}
+
+/* Perbaikan pada tombol aksi untuk menyertakan ikon */
+.btn-edit, .btn-delete {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Jarak antara ikon dan teks */
 }
