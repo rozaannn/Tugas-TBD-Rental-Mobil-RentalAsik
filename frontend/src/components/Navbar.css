@@ -1,64 +1,109 @@
+/* src/components/Navbar.css */
+
+/* Kontainer utama navbar */
 .navbar {
-    background: #232a34;
-    height: 80px;
+    background: #000; /* Latar belakang hitam pekat */
+    height: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     position: sticky;
     top: 0;
     z-index: 999;
+    border-bottom: 1px solid #222; /* Garis bawah tipis untuk memisahkan */
+    font-family: 'Montserrat', sans-serif; /* Ganti font agar lebih modern (opsional, tambahkan di index.css) */
 }
+
+/* Kontainer untuk menjaga konten tetap di tengah */
 .navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
-    padding: 0 20px;
+    max-width: 1400px; /* Dibuat lebih lebar */
+    padding: 0 30px;
 }
+
+/* Styling untuk logo */
 .navbar-logo {
     color: #fff;
+    justify-self: start;
+    cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
+    display: flex;
+    align-items: center;
     font-weight: bold;
+    font-style: italic; /* Membuat teks miring seperti di contoh */
 }
+
+/* Menu utama */
 .nav-menu {
     display: flex;
+    align-items: center;
     list-style: none;
     text-align: center;
-    margin: 0;
-    padding: 0;
 }
+
 .nav-item {
-    height: 80px;
+    height: 90px;
     display: flex;
     align-items: center;
 }
+
+/* Styling untuk setiap link/tombol di menu */
 .nav-links {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+    position: relative; /* Diperlukan untuk efek garis bawah */
+    text-transform: uppercase; /* Membuat teks menjadi kapital */
+    font-weight: 600;
+}
+
+/* --- EFEK GARIS BAWAH SAAT HOVER --- */
+.nav-links::after {
+    content: '';
+    position: absolute;
+    bottom: 25px; /* Atur posisi garis di bawah teks */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    transform: scaleX(0); /* Awalnya garis tidak terlihat (lebar 0) */
+    transform-origin: left; /* Mulai animasi dari kiri */
+    transition: transform 0.4s ease-out; /* Animasi transisi */
+}
+
+.nav-links:hover::after {
+    transform: scaleX(1); /* Saat hover, buat garis terlihat (lebar 100%) */
+}
+/* --- AKHIR EFEK --- */
+
+/* Styling untuk nama user dan tombol logout */
+.nav-user, .nav-links-button {
     color: #fff;
     text-decoration: none;
     padding: 0.5rem 1rem;
-    transition: background-color 0.2s ease-out;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
 }
-.nav-links:hover {
-    background-color: #0056b3;
-    border-radius: 4px;
-}
-.nav-user {
-    color: #ccc;
-    cursor: default;
-}
+
 .nav-links-button {
     background: none;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 0.5rem 1rem;
-}
-.nav-links-button:hover {
-    background-color: #c82333;
+    border: 1px solid white;
     border-radius: 4px;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+}
+
+.nav-links-button:hover {
+    background: #fff;
+    color: #000;
 }

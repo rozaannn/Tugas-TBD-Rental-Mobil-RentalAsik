@@ -15,45 +15,54 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <Link to="/" className="navbar-logo">RentalAsik</Link>
+                {/* Bagian Kiri: Logo */}
+                <Link to="/" className="navbar-logo">
+                    RentalAsik
+                </Link>
+
+                {/* Bagian Tengah: Menu Utama & Menu Admin/User */}
                 <ul className="nav-menu">
                     <li className="nav-item">
-                        <Link to="/cars" className="nav-links">Mobil</Link>
+                        <Link to="/" className="nav-links">Home</Link>
                     </li>
-
-                    {/* --- BLOK KONDISIONAL UTAMA YANG DIPERBAIKI --- */}
-                    {user ? (
-                        // Jika user SUDAH LOGIN
+                    <li className="nav-item">
+                        <Link to="/cars" className="nav-links">Cars</Link>
+                    </li>
+                    
+                    {/* Tampilkan menu admin jika user adalah admin */}
+                    {user && user.is_admin && (
                         <>
-                            {user.is_admin ? (
-                                // Tampilan KHUSUS untuk Admin
-                                <>
-                                    <li className="nav-item"><Link to="/admin/dashboard" className="nav-links">Dashboard</Link></li>
-                                    <li className="nav-item"><Link to="/admin/cars" className="nav-links">Manajemen Mobil</Link></li>
-                                    <li className="nav-item"><Link to="/admin/bookings" className="nav-links">Manajemen Booking</Link></li>
-                                </>
-                            ) : (
-                                // Tampilan KHUSUS untuk Pengguna Biasa
-                                <li className="nav-item">
-                                    <Link to="/my-bookings" className="nav-links">Booking Saya</Link>
-                                </li>
-                            )}
+                            <li className="nav-item"><Link to="/admin/dashboard" className="nav-links">Dashboard</Link></li>
+                            <li className="nav-item"><Link to="/admin/cars" className="nav-links">Manage Cars</Link></li>
+                            <li className="nav-item"><Link to="/admin/bookings" className="nav-links">Manage Bookings</Link></li>
+                        </>
+                    )}
 
-                            {/* Tampilan yang sama untuk SEMUA user yang sudah login */}
+                    {/* Tampilkan menu user jika user login tapi bukan admin */}
+                    {user && !user.is_admin && (
+                        <li className="nav-item">
+                            <Link to="/my-bookings" className="nav-links">My Bookings</Link>
+                        </li>
+                    )}
+                </ul>
+
+                {/* Bagian Kanan: Info User & Otentikasi */}
+                <ul className="nav-menu">
+                    {user ? (
+                        <>
                             <li className="nav-item">
-                                <span className="nav-links nav-user">Halo, {user.name}!</span>
+                                <span className="nav-user">Halo, {user.name}!</span>
                             </li>
                             <li className="nav-item">
                                 <button onClick={handleLogout} className="nav-links-button">Logout</button>
                             </li>
                         </>
                     ) : (
-                        // Jika user BELUM LOGIN
                         <>
                             <li className="nav-item">
                                 <Link to="/login" className="nav-links">Login</Link>
                             </li>
-                            <li className="nav-item">
+                             <li className="nav-item">
                                 <Link to="/register" className="nav-links">Register</Link>
                             </li>
                         </>
