@@ -44,47 +44,52 @@ const AdminBookingsPage = () => {
             <div className="admin-header">
                 <h1>Manajemen Booking</h1>
             </div>
-            <table className="admin-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pelanggan</th>
-                        <th>Mobil</th>
-                        <th>Plat Nomor</th>
-                        <th>Tanggal Sewa</th>
-                        <th>Total</th>
-                        <th>Status Saat Ini</th>
-                        <th>Ubah Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bookings.map(booking => (
-                        <tr key={booking.id}>
-                            <td>{booking.id}</td>
-                            <td>{booking.user_name} ({booking.user_email})</td>
-                            <td>{booking.model} ({booking.year})</td>
-                            <td>{booking.license_plate}</td>
-                            <td>{new Date(booking.start_date).toLocaleDateString('id-ID')} - {new Date(booking.end_date).toLocaleDateString('id-ID')}</td>
-                            <td>Rp {Number(booking.total_amount).toLocaleString('id-ID')}</td>
-                            <td><span className={`status status-${booking.status}`}>{booking.status}</span></td>
-                            <td>
-                                <select 
-                                    defaultValue={booking.status} 
-                                    onChange={(e) => handleStatusChange(booking.id, e.target.value)}
-                                    className="status-select"
-                                >
-                                    <option value="pending">Pending</option>
-                                    <option value="confirmed">Confirmed</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </td>
+            <div style={{ overflowX: 'auto' }}>
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th className="col-center">ID</th>
+                            <th>Pelanggan</th>
+                            <th>Mobil</th>
+                            <th>Plat Nomor</th>
+                            <th className="col-center">Tanggal Sewa</th>
+                            <th className="col-right">Total</th>
+                            <th className="col-center">Status Saat Ini</th>
+                            <th className="col-center">Ubah Status</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {bookings.map(booking => (
+                            <tr key={booking.id}>
+                                <td className="col-center">{booking.id}</td>
+                                <td>{booking.user_name} <br/> <small>({booking.user_email})</small></td>
+                                <td>{booking.model} ({booking.year})</td>
+                                <td>{booking.license_plate}</td>
+                                <td className="col-center">{new Date(booking.start_date).toLocaleDateString('id-ID')} - {new Date(booking.end_date).toLocaleDateString('id-ID')}</td>
+                                <td className="col-right">Rp {Number(booking.total_amount).toLocaleString('id-ID')}</td>
+                                <td className="col-center">
+                                    <span className={`status status-${booking.status}`}>{booking.status}</span>
+                                </td>
+                                <td className="col-center">
+                                    <select 
+                                        value={booking.status} 
+                                        onChange={(e) => handleStatusChange(booking.id, e.target.value)}
+                                        className="status-select"
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="confirmed">Confirmed</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
+    
 };
 
 export default AdminBookingsPage;

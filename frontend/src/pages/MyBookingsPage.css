@@ -1,40 +1,72 @@
+/* src/pages/MyBookingsPage.css */
+
 .bookings-list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
+
 .booking-card {
     display: flex;
     gap: 1.5rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
+    padding: 1.5rem;
     align-items: center;
+    /* Styling baru agar cocok dengan tema gelap */
+    background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+    border: 1px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15); /* Efek glow biru saat hover */
+}
+
 .booking-car-image {
-    width: 150px;
-    height: 100px;
+    width: 180px; /* Sedikit lebih besar */
+    height: 120px;
     object-fit: cover;
-    border-radius: 4px;
-    background-color: #eee;
+    border-radius: 8px;
+    background-color: #333;
+    border: 1px solid #444;
 }
+
+.booking-details {
+    flex-grow: 1; /* Membuat bagian detail ini mengisi sisa ruang */
+}
+
 .booking-details h3 {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.75rem 0;
+    font-size: 1.5rem;
+    color: #fff; /* Pastikan teks terang */
 }
+
 .booking-details p {
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
+    color: #ccc; /* Warna teks yang lebih lembut */
+    font-size: 1rem;
 }
+
+.booking-details p strong {
+    color: #e0e0e0; /* Buat label sedikit lebih terang */
+}
+
+/* Styling untuk status badge (konsisten dengan halaman admin) */
 .status {
     display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: capitalize;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
 }
+
 .status-confirmed { background-color: #28a745; }
-.status-pending { background-color: #ffc107; color: #333; }
+.status-pending { background-color: #ffc107; color: #111; }
 .status-completed { background-color: #17a2b8; }
 .status-cancelled { background-color: #dc3545; }
