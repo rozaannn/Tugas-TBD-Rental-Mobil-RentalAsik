@@ -7,7 +7,7 @@ const fs = require('fs').promises; // [cite: 57]
 const getAllCars = async (req, res) => { // [cite: 58]
     try {
         const [cars] = await db.execute( // [cite: 58]
-            'SELECT id, model, year, price, image, available FROM cars ORDER BY created_at DESC' // [cite: 58]
+            'SELECT id, model, license_plate, year, price, image, available FROM cars ORDER BY created_at DESC' // [cite: 58]
         );
         res.json({ // [cite: 59]
             success: true, // [cite: 59]
@@ -67,24 +67,34 @@ const addCar = async (req, res) => { // [cite: 68]
         const image = req.file ? req.file.filename : null; // [cite: 71]
 
         const [result] = await db.execute( // [cite: 71]
-            'INSERT INTO cars (model, license_plate, year, price, image) VALUES (?, ?, ?, ?)', // [cite: 71]
+            'INSERT INTO cars (model, license_plate, year, price, image) VALUES (?, ?, ?, ?, ?)', // [cite: 71]
             [model, license_plate, year, price, image] // [cite: 71]
         );
+
         // Get the created car
         const [newCar] = await db.execute( // [cite: 72]
             'SELECT * FROM cars WHERE id = ?', // [cite: 72]
             [result.insertId] // [cite: 72]
         );
+
         res.status(201).json({ // [cite: 73]
             success: true, // [cite: 73]
             message: 'Car added successfully', // [cite: 73]
             data: newCar[0] // [cite: 73]
         });
     } catch (error) { // [cite: 74]
-        console.error('Add car error:', error); // [cite: 74]
-        res.status(500).json({ // [cite: 75]
-            success: false, // [cite: 75]
-            message: 'Failed to add car' // [cite: 75]
+if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({
+                success: false,
+                message: 'License Plate cannot be same as other car.'
+            });
+        }
+        // --- AKHIR LOGIKA TAMBAHAN ---
+
+        console.error('Add car error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'There is an error on the server when trying to add new car.'
         });
     }
 };
@@ -141,10 +151,17 @@ const updateCar = async (req, res) => { // [cite: 76]
             data: updatedCar[0] // [cite: 85]
         });
     } catch (error) { // [cite: 86]
-        console.error('Update car error:', error); // [cite: 86]
-        res.status(500).json({ // [cite: 87]
-            success: false, // [cite: 87]
-            message: 'Failed to update car' // [cite: 87]
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({
+                success: false,
+                message: 'Plat Nomor tidak boleh sama, sudah terdaftar.'
+            });
+        }
+        
+        console.error('Update car error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Gagal memperbarui mobil.'
         });
     }
 };

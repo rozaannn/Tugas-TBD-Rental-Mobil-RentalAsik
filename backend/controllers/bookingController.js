@@ -143,7 +143,7 @@ const getUserBookings = async (req, res) => { // [cite: 119]
 const getAllBookings = async (req, res) => { // [cite: 125]
     try {
         const [bookings] = await db.execute( // [cite: 125]
-            `SELECT b.*, c.model, c.year, u.name as user_name, u.email as user_email
+            `SELECT b.*, c.model, c.year, c.license_plate, u.name as user_name, u.email as user_email
              FROM bookings b
              JOIN cars c ON b.car_id = c.id
              JOIN users u ON b.user_id = u.id
