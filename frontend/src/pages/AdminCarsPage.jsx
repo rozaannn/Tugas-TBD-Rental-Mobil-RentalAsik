@@ -46,6 +46,7 @@ const AdminCarsPage = () => {
                     <tr>
                         <th>ID</th>
                         <th>Model</th>
+                        <th>Plat Nomor</th>
                         <th>Tahun</th>
                         <th>Harga/hari</th>
                         <th>Tersedia</th>
@@ -57,6 +58,7 @@ const AdminCarsPage = () => {
                         <tr key={car.id}>
                             <td>{car.id}</td>
                             <td>{car.model}</td>
+                            <td>{car.license_plate}</td>
                             <td>{car.year}</td>
                             <td>Rp {Number(car.price).toLocaleString('id-ID')}</td>
                             <td>{car.available ? 'Ya' : 'Tidak'}</td>

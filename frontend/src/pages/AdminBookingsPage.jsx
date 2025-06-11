@@ -49,6 +49,7 @@ const AdminBookingsPage = () => {
                         <th>ID</th>
                         <th>Pelanggan</th>
                         <th>Mobil</th>
+                        <th>Plat Nomor</th>
                         <th>Tanggal Sewa</th>
                         <th>Total</th>
                         <th>Status Saat Ini</th>
@@ -61,6 +62,7 @@ const AdminBookingsPage = () => {
                             <td>{booking.id}</td>
                             <td>{booking.user_name} ({booking.user_email})</td>
                             <td>{booking.model} ({booking.year})</td>
+                            <td>{booking.license_plate}</td>
                             <td>{new Date(booking.start_date).toLocaleDateString('id-ID')} - {new Date(booking.end_date).toLocaleDateString('id-ID')}</td>
                             <td>Rp {Number(booking.total_amount).toLocaleString('id-ID')}</td>
                             <td><span className={`status status-${booking.status}`}>{booking.status}</span></td>
