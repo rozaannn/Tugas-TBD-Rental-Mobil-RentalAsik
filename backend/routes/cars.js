@@ -9,7 +9,8 @@ const {
     updateCar,
     deleteCar,
     getPopularCars,
-    getCarAvailabilityDetails
+    getCarAvailabilityDetails,
+    getCarModels
 } = require('../controllers/carController'); // [cite: 148]
 const { authenticateToken, requireAdmin } = require('../middleware/auth'); // [cite: 149]
 
@@ -51,7 +52,7 @@ const carValidation = [ // [cite: 152]
 // Routes untuk view popular cars dan car availability details
 router.get('/availability', getCarAvailabilityDetails);
 router.get('/popular', authenticateToken, requireAdmin, getPopularCars);
-// Routes
+router.get('/models', authenticateToken, requireAdmin, getCarModels);
 router.get('/', getAllCars); // [cite: 153]
 router.get('/:id', getCarById); // [cite: 153]
 router.post('/', authenticateToken, requireAdmin, upload.single('image'), carValidation, addCar); // [cite: 153]

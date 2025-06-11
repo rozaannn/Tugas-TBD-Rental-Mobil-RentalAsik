@@ -13,8 +13,18 @@ const AdminCarFormPage = () => {
     const [price, setPrice] = useState('');
     const [available, setAvailable] = useState(true);
     const [image, setImage] = useState(null);
+    const[existingModels, setExistingModels] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+        api.get('/cars/models')
+            .then(response => {
+                setExistingModels(response.data.data);
+            })
+            .catch(err => console.error("Gagal memuat model mobil", err));
+    }, []);
 
     useEffect(() => {
         if (isEditMode) {
@@ -37,6 +47,20 @@ const AdminCarFormPage = () => {
         }
     }, [id, isEditMode]);
 
+    //Fungsiuntuk menangani saat model dipilih dari daftar
+    const handleModelChange = (e) => {
+        const selectedModelName = e.target.value;
+        setModel(selectedModelName);
+
+        //Cari model yang cocok dari daftar yang sudah kita fetch
+        const selectedModelData = existingModels.find(m => m.model === selectedModelName);
+        
+        //Jika ditemukan, isi otomatis field lain
+        if (selectedModelData) {
+            setYear(selectedModelData.year);
+            setPrice(selectedModelData.price);
+        }
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -81,7 +105,13 @@ const AdminCarFormPage = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Model</label>
-                    <input type="text" value={model} onChange={(e) => setModel(e.target.value)} required />
+                    <input type="text" value={model} onChange={handleModelChange} required list="existing-models"/>
+                    <datalist id="existing-models">
+                        {existingModels.map((m, index) => (
+                            <option key={index} value={m.model} />
+                        ))}
+                    </datalist>
+                    <small>Ketik untuk mencari atau pilih model yang sudah ada. Harga dan tahun akan terisi otomatis.</small>
                 </div>
                 <div className="form-group">
                     <label>Plat Nomor</label>

@@ -51,50 +51,68 @@ const getCarById = async (req, res) => { // [cite: 62]
 };
 
 // Add new car (Admin only)
-const addCar = async (req, res) => { // [cite: 68]
+const addCar = async (req, res) => {
     try {
-        // Check for validation errors
-        const errors = validationResult(req); // [cite: 68]
-        if (!errors.isEmpty()) { // [cite: 69]
-            return res.status(400).json({ // [cite: 69]
-                success: false, // [cite: 69]
-                message: 'Validation failed', // [cite: 69]
-                errors: errors.array() // [cite: 69]
-            });
-        }
-
-        const { model, license_plate, year, price } = req.body; // [cite: 70]
-        const image = req.file ? req.file.filename : null; // [cite: 71]
-
-        const [result] = await db.execute( // [cite: 71]
-            'INSERT INTO cars (model, license_plate, year, price, image) VALUES (?, ?, ?, ?, ?)', // [cite: 71]
-            [model, license_plate, year, price, image] // [cite: 71]
-        );
-
-        // Get the created car
-        const [newCar] = await db.execute( // [cite: 72]
-            'SELECT * FROM cars WHERE id = ?', // [cite: 72]
-            [result.insertId] // [cite: 72]
-        );
-
-        res.status(201).json({ // [cite: 73]
-            success: true, // [cite: 73]
-            message: 'Car added successfully', // [cite: 73]
-            data: newCar[0] // [cite: 73]
-        });
-    } catch (error) { // [cite: 74]
-if (error.code === 'ER_DUP_ENTRY') {
+        // Validation from express-validator
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
             return res.status(400).json({
                 success: false,
-                message: 'License Plate cannot be same as other car.'
+                message: 'Validation failed',
+                errors: errors.array()
             });
         }
-        // --- AKHIR LOGIKA TAMBAHAN ---
 
+        const { model, license_plate, year, price } = req.body;
+        const image = req.file ? req.file.filename : null;
+
+        // --- NEW LOGIC: PRICE CONSISTENCY CHECK ---
+        // Check if a car with the same model and year already exists
+        const [existingCars] = await db.execute(
+            'SELECT price FROM cars WHERE model = ? AND year = ? LIMIT 1',
+            [model, year]
+        );
+
+        // If the model exists, we must check if the price is consistent
+        if (existingCars.length > 0) {
+            const existingPrice = parseFloat(existingCars[0].price);
+            const submittedPrice = parseFloat(price);
+
+            // If the submitted price is different, send a specific error
+            if (existingPrice !== submittedPrice) {
+                return res.status(400).json({
+                    success: false,
+                    message: "To change the price for an existing model, please use the edit car feature."
+                });
+            }
+        }
+        // --- END OF NEW LOGIC ---
+
+        // If the code reaches here, it means it's either a new model,
+        // or it's an existing model with the correct price. Proceed to insert.
+        await db.execute(
+            'INSERT INTO cars (model, license_plate, year, price, image, available) VALUES (?, ?, ?, ?, ?, ?)',
+            [model, license_plate, year, price, image, true] // Assuming new cars are available by default
+        );
+        
+        // We can just send a success message without fetching the new car again
+        res.status(201).json({ 
+            success: true, 
+            message: 'Car added successfully!' 
+        });
+
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({
+                success: false,
+                message: 'License plate already exists.'
+            });
+        }
+        
         console.error('Add car error:', error);
         res.status(500).json({
             success: false,
-            message: 'There is an error on the server when trying to add new car.'
+            message: 'An error occurred on the server while adding the car.'
         });
     }
 };
@@ -250,6 +268,27 @@ const getCarAvailabilityDetails = async (req, res) => {
     }
 };
 
+//fungsi untuk mendapatkan daftar model mobil
+const getCarModels = async (req, res) => {
+    try {
+        // Query ini mengambil satu baris per kombinasi model-tahun,
+        // yang efektif memberikan daftar tipe mobil yang unik.
+        const [models] = await db.execute(
+            `SELECT DISTINCT model, year, price FROM cars ORDER BY model ASC, year DESC`
+        );
+        res.json({
+            success: true,
+            data: models
+        });
+    } catch (error) {
+        console.error('Get car models error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch car models'
+        });
+    }
+};
+
 module.exports = {
     getAllCars, // [cite: 99]
     getCarById, // [cite: 99]
@@ -257,5 +296,6 @@ module.exports = {
     updateCar, // [cite: 100]
     deleteCar, // [cite: 100]
     getPopularCars,
-    getCarAvailabilityDetails
+    getCarAvailabilityDetails,
+    getCarModels
 };
