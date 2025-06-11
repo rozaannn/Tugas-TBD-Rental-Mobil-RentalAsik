@@ -2,23 +2,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
 
 .hero-container {
-    /* Menggunakan gambar dari folder assets sebagai background */
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/76LT-TAMNEL.jpg');
-    height: calc(100vh - 90px); /* Tinggi 100% layar dikurangi tinggi navbar */
+    height: calc(100vh - 90px);
     width: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    
-    /* Menengahkan konten di dalamnya */
+    position: relative; /* Penting untuk menumpuk elemen */
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* Sembunyikan bagian video yang keluar dari kontainer */
     text-align: center;
     color: #fff;
     padding: 0 20px;
     box-sizing: border-box;
+}
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Trik untuk menengahkan video */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1; /* Letakkan video di lapisan paling belakang */
+}
+
+/* Buat lapisan overlay gelap di atas video */
+.hero-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Overlay gelap */
+}
+/* Konten teks dan tombol harus di atas overlay */
+.hero-content {
+    z-index: 1; /* Posisikan di atas overlay */
+    animation: fadeInUp 1s ease-out forwards;
+    transform: translateY(5%);
 }
 
 .hero-content {
