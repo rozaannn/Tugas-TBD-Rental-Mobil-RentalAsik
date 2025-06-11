@@ -1,0 +1,40 @@
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.booking-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    align-items: center;
+}
+.booking-car-image {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    background-color: #eee;
+}
+.booking-details h3 {
+    margin: 0 0 0.5rem 0;
+}
+.booking-details p {
+    margin: 0.25rem 0;
+}
+.status {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    color: white;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+.status-confirmed { background-color: #28a745; }
+.status-pending { background-color: #ffc107; color: #333; }
+.status-completed { background-color: #17a2b8; }
+.status-cancelled { background-color: #dc3545; }
