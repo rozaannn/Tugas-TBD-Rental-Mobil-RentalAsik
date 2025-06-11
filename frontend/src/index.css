@@ -5,9 +5,7 @@ body {
   background-color: #f4f4f9;
   color: #333;
 }
-main {
-  padding-top: 2rem;
-}
+
 .container {
   width: 90%;
   max-width: 1200px;

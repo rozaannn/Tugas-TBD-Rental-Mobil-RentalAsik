@@ -1,0 +1,81 @@
+/* Mengimpor font dari Google Fonts (opsional, tapi disarankan) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+
+.hero-container {
+    /* Menggunakan gambar dari folder assets sebagai background */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/76LT-TAMNEL.jpg');
+    height: calc(100vh - 90px); /* Tinggi 100% layar dikurangi tinggi navbar */
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    /* Menengahkan konten di dalamnya */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.hero-content {
+    /* Menerapkan animasi pada kontainer konten */
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.hero-h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+.hero-p {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    max-width: 600px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out 0.8s forwards;
+    opacity: 0;
+}
+
+.hero-btn {
+    margin-top: 2rem;
+    padding: 1rem 2.5rem;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    animation: fadeInUp 1s ease-out 1.1s forwards;
+    opacity: 0;
+}
+
+.hero-btn:hover {
+    background-color: #fff;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+
+/* Definisi Keyframe untuk Animasi Fade In + Slide Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
