@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'; 
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import Modal from '../components/Modal.jsx';
 import './AdminPage.css'; // Kita akan buat file CSS ini
 
 const AdminCarsPage = () => {
     const [cars, setCars] = useState([]);
     const [error, setError] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [carToDelete, setCarToDelete] = useState(null);
 
     const fetchCars = () => {
         api.get('/cars')
@@ -23,19 +26,33 @@ const AdminCarsPage = () => {
         fetchCars();
     }, []);
 
-    const handleDelete = async (carId) => {
-        if (window.confirm('Apakah Anda yakin ingin menghapus mobil ini?')) {
-            try {
-                await api.delete(`/cars/${carId}`);
-                toast.success('Mobil berhasil dihapus!');
-                fetchCars(); // Muat ulang daftar mobil setelah dihapus
-            } catch (err) {
-                toast.error('Gagal menghapus mobil: ' + (err.response?.data?.message || err.message));
-            }
+    const openDeleteModal = (car) => {
+        setCarToDelete(car);
+        setIsModalOpen(true);
+    };
+
+     const closeDeleteModal = () => {
+        setIsModalOpen(false);
+        setCarToDelete(null);
+    };
+
+    const confirmDelete = async () => {
+        if (!carToDelete) return;
+
+        try {
+            await api.delete(`/cars/${carToDelete.id}`);
+            toast.success(`Mobil "${carToDelete.model}" berhasil dihapus!`);
+            fetchCars(); // Muat ulang daftar mobil
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || 'Gagal menghapus mobil.';
+            toast.error(errorMessage);
+        } finally {
+            closeDeleteModal(); // Tutup modal setelah selesai
         }
     };
 
     return (
+        <>
         <div className="container">
             <div className="admin-header">
                 <h1>Manajemen Mobil</h1>
@@ -65,13 +82,26 @@ const AdminCarsPage = () => {
                             <td>{car.available ? 'Ya' : 'Tidak'}</td>
                             <td className="actions">
                                 <Link to={`/admin/cars/edit/${car.id}`} className="btn-edit">Edit</Link>
-                                <button onClick={() => handleDelete(car.id)} className="btn-delete">Hapus</button>
+                                <button onClick={() => openDeleteModal(car)} className="btn-delete">Hapus</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
+                    <Modal
+                    isOpen={isModalOpen}
+                    onClose={closeDeleteModal}
+                    onConfirm={confirmDelete}
+                    title="Konfirmasi Penghapusan"
+                >
+                    <p>Apakah Anda yakin ingin menghapus mobil berikut?</p>
+                    {carToDelete && (
+                        <p><strong>{carToDelete.model} ({carToDelete.license_plate})</strong></p>
+                    )}
+                </Modal>
+            </>
+    
     );
 };
 
