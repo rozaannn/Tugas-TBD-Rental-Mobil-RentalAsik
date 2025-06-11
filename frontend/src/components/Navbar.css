@@ -1,8 +1,6 @@
-/* src/components/Navbar.css */
-
-/* Kontainer utama navbar */
+/* Styling dasar navbar */
 .navbar {
-    background: #000; /* Latar belakang hitam pekat */
+    background: #000;
     height: 90px;
     display: flex;
     justify-content: center;
@@ -10,49 +8,42 @@
     font-size: 1rem;
     position: sticky;
     top: 0;
-    z-index: 999;
-    border-bottom: 1px solid #222; /* Garis bawah tipis untuk memisahkan */
-    font-family: 'Montserrat', sans-serif; /* Ganti font agar lebih modern (opsional, tambahkan di index.css) */
+    z-index: 1000;
+    border-bottom: 1px solid #222;
 }
-
-/* Kontainer untuk menjaga konten tetap di tengah */
 .navbar-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Ini akan mendorong logo ke kiri dan wrapper menu ke kanan */
     align-items: center;
     width: 100%;
-    max-width: 1400px; /* Dibuat lebih lebar */
+    max-width: 1400px;
     padding: 0 30px;
 }
-
-/* Styling untuk logo */
 .navbar-logo {
     color: #fff;
-    justify-self: start;
-    cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
-    display: flex;
-    align-items: center;
     font-weight: bold;
-    font-style: italic; /* Membuat teks miring seperti di contoh */
+    font-style: italic;
 }
-
-/* Menu utama */
+.nav-wrapper {
+    display: flex; /* Membuat menu utama dan menu auth sejajar */
+    align-items: center;
+    gap: 1.5rem; /* Memberi jarak antara menu utama dan menu auth */
+}
 .nav-menu {
     display: flex;
     align-items: center;
     list-style: none;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
-
 .nav-item {
     height: 90px;
     display: flex;
     align-items: center;
 }
-
-/* Styling untuk setiap link/tombol di menu */
 .nav-links {
     color: #fff;
     display: flex;
@@ -61,31 +52,25 @@
     padding: 0 1rem;
     height: 100%;
     cursor: pointer;
-    position: relative; /* Diperlukan untuk efek garis bawah */
-    text-transform: uppercase; /* Membuat teks menjadi kapital */
+    position: relative;
+    text-transform: uppercase;
     font-weight: 600;
 }
-
-/* --- EFEK GARIS BAWAH SAAT HOVER --- */
 .nav-links::after {
     content: '';
     position: absolute;
-    bottom: 25px; /* Atur posisi garis di bawah teks */
+    bottom: 25px;
     left: 0;
     width: 100%;
     height: 2px;
     background-color: #fff;
-    transform: scaleX(0); /* Awalnya garis tidak terlihat (lebar 0) */
-    transform-origin: left; /* Mulai animasi dari kiri */
-    transition: transform 0.4s ease-out; /* Animasi transisi */
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease-out;
 }
-
 .nav-links:hover::after {
-    transform: scaleX(1); /* Saat hover, buat garis terlihat (lebar 100%) */
+    transform: scaleX(1);
 }
-/* --- AKHIR EFEK --- */
-
-/* Styling untuk nama user dan tombol logout */
 .nav-user, .nav-links-button {
     color: #fff;
     text-decoration: none;
@@ -94,7 +79,6 @@
     font-weight: 600;
     text-transform: uppercase;
 }
-
 .nav-links-button {
     background: none;
     border: 1px solid white;
@@ -102,8 +86,73 @@
     margin-left: 1rem;
     transition: all 0.3s ease;
 }
-
 .nav-links-button:hover {
     background: #fff;
     color: #000;
+}
+
+/* Styling untuk Ikon Hamburger (Awalnya Tersembunyi) */
+.menu-icon {
+    display: none;
+    cursor: pointer;
+}
+.bar {
+    width: 25px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Styling Responsif (Ketika Layar Kecil) */
+@media screen and (max-width: 1024px) { /* Breakpoint diubah agar lebih responsif */
+    .nav-wrapper {
+        display: flex;
+        flex-direction: column; /* Ubah jadi vertikal untuk sidebar */
+        width: 100%;
+        height: 100vh; /* Tinggi penuh */
+        position: fixed; /* Posisi fixed agar menutupi halaman */
+        top: 0;
+        left: -100%; /* Sembunyikan di luar layar */
+        padding-top: 90px; /* Beri jarak dari navbar atas */
+        opacity: 1;
+        transition: all 0.5s ease;
+        background: #111;
+        gap: 0; /* Hapus gap di mode sidebar */
+    }
+
+    .nav-wrapper.active {
+        left: 0; /* Tampilkan sidebar */
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .nav-item {
+        width: 100%;
+        height: 70px;
+        justify-content: center;
+    }
+
+    .nav-auth {
+        border-top: 1px solid #444;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .menu-icon {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-100%, 75%);
+        font-size: 1.8rem;
+    }
+    
+    /* ... (styling untuk animasi ikon hamburger tetap sama) ... */
+    .menu-icon .bar.open:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+    .menu-icon .bar.open:nth-child(2) { opacity: 0; }
+    .menu-icon .bar.open:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 }
