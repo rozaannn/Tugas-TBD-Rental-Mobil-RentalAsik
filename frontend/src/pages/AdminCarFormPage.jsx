@@ -102,7 +102,7 @@ const AdminCarFormPage = () => {
     if (loading && isEditMode) return <div className="container"><p>Loading data mobil...</p></div>;
 
     return (
-    <div>
+    <div className="page-center-container"> 
         <div className="form-container">
             <h2>{isEditMode ? 'Edit Mobil' : 'Tambah Mobil Baru'}</h2>
             {/*error && <p style={{ color: 'red' }}>{error}</p>*/}
