@@ -12,7 +12,8 @@
 }
 
 .modal-content {
-    background: white;
+    background: #fdfdfd;
+    color: #333;
     padding: 2rem;
     border-radius: 8px;
     width: 90%;
@@ -30,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
 }
@@ -38,6 +39,7 @@
 .modal-title {
     margin: 0;
     font-size: 1.5rem;
+    color: #111;
 }
 
 .modal-close-button {

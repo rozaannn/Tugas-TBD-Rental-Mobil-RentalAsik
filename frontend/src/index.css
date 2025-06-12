@@ -105,3 +105,20 @@ body {
 .form-link a:hover {
   text-decoration: underline;
 }
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 90px - 4rem);
+  padding: 2rem 0;
+}
+
+.page-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: calc(100vh - 90px);
+  box-sizing: border-box;
+}
